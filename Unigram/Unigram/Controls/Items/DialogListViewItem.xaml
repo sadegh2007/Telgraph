@@ -55,6 +55,7 @@
                 <TextBlock Text="{x:Bind ViewModel.With.DisplayName, Mode=OneWay}"
                            Grid.Column="1"
                            MaxLines="1"
+                           FontSize="13"
                            TextWrapping="NoWrap"
                            TextTrimming="CharacterEllipsis"
                            Style="{StaticResource BaseTextBlockStyle}"/>
@@ -100,6 +101,7 @@
                        Foreground="{ThemeResource SystemControlDisabledChromeDisabledLowBrush}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap"
+                       FontSize="13"
                        MaxLines="1">
                 <ToolTipService.ToolTip>
                     <ToolTip Opened="ToolTip_Opened"/>

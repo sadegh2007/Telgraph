@@ -35,7 +35,9 @@ namespace Telegram.Api.TL
 
 		public override TLType TypeId { get { return TLType.Dialog; } }
 
-		public override void Read(TLBinaryReader from)
+        public bool Hidden { get; set; } = false;
+
+        public override void Read(TLBinaryReader from)
 		{
 			Flags = (Flag)from.ReadInt32();
 			Peer = TLFactory.Read<TLPeerBase>(from);

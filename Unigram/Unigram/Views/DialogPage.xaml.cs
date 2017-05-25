@@ -663,6 +663,22 @@ namespace Unigram.Views
             }
         }
 
+        private void MessageForwardWN_Loaded(object sender, RoutedEventArgs e)
+        {
+            var element = sender as MenuFlyoutItem;
+            if (element != null)
+            {
+                var messageCommon = element.DataContext as TLMessageCommonBase;
+                if (messageCommon != null)
+                {
+                    messageCommon.wn = true;
+                    messageCommon.FromId = SettingsHelper.UserId;
+                }
+
+                element.Visibility = Visibility.Visible;
+            }
+        }
+
         private void MessageCopy_Loaded(object sender, RoutedEventArgs e)
         {
             var element = sender as MenuFlyoutItem;

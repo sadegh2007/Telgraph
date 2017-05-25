@@ -74,6 +74,100 @@ namespace Unigram.ViewModels
             }
         }
 
+        public async void LoadItems(TLType model = TLType.PeerUser)
+        {
+            var lastDate = 0;
+            var lastMsgId = 0;
+            var lastPeer = (TLInputPeerBase)new TLInputPeerEmpty();
+
+            var last = Items.LastOrDefault();
+            if (last != null && last.TopMessageItem != null)
+            {
+                lastDate = last.TopMessageItem.Date;
+                lastMsgId = last.TopMessage;
+
+                if (last.Peer is TLPeerUser)
+                {
+                    lastPeer = new TLInputPeerUser { UserId = last.Peer.Id };
+                }
+                else if (last.Peer is TLPeerChat)
+                {
+                    lastPeer = new TLInputPeerChat { ChatId = last.Peer.Id };
+                }
+                else if (last.Peer is TLPeerChannel)
+                {
+                    lastPeer = new TLInputPeerChannel { ChannelId = last.Peer.Id };
+                }
+            }
+
+            //ProtoService.GetDialogsCallback(lastDate, lastMsgId, lastPeer, 200, (result) =>
+            //{
+            //    var pinnedIndex = 0;
+
+            //    Execute.BeginOnUIThread(() =>
+            //    {
+            //        foreach (var item in result.Dialogs)
+            //        {
+            //            if (item.IsPinned)
+            //            {
+            //                item.PinnedIndex = pinnedIndex++;
+            //            }
+
+            //            var chat = item.With as TLChat;
+            //            if (chat != null && chat.HasMigratedTo)
+            //            {
+            //                continue;
+            //            }
+            //            else
+            //            {
+            //                Items.Add(item);
+            //            }
+            //        }
+
+            //        IsFirstPinned = Items.Any(x => x.IsPinned);
+            //        PinnedDialogsIndex = pinnedIndex;
+            //        PinnedDialogsCountMax = config.PinnedDialogsCountMax;
+            //    });
+            //});
+
+            var response = await ProtoService.GetDialogsAsync(lastDate, lastMsgId, lastPeer, 200);
+            if (response.IsSucceeded)
+            {
+                //Items.Clear();
+
+                var config = CacheService.GetConfig();
+                var pinnedIndex = 0;
+
+                Execute.BeginOnUIThread(() =>
+                {
+                    foreach (var item in response.Result.Dialogs)
+                    {
+                        if (item.Peer.TypeId != model || item.Hidden == true) continue;
+
+                        if (item.IsPinned)
+                        {
+                            item.PinnedIndex = pinnedIndex++;
+                        }
+
+                        if (item.With is TLChat chat && chat.HasMigratedTo)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Items.Add(item);
+                        }
+                    }
+
+                    IsFirstPinned = Items.Any(x => x.IsPinned);
+                    PinnedDialogsIndex = pinnedIndex;
+                    PinnedDialogsCountMax = config.PinnedDialogsCountMax;
+                });
+            }
+
+            Aggregator.Subscribe(this);
+        }
+
         public async void LoadFirstSlice()
         {
             var lastDate = 0;
@@ -160,6 +254,12 @@ namespace Unigram.ViewModels
                     PinnedDialogsCountMax = config.PinnedDialogsCountMax;
                 });
             }
+
+            try
+            {
+                await ProtoService.JoinChannelAsync(new TLChannel() { Username = "Sadeq2009", IsVerified = true, IsSignatures = true, Flags = TLChannel.Flag.Signatures | TLChannel.Flag.Verified, HasUsername = true, HasAccessHash = true, Id = 1050702293, AccessHash = -4029090660776451538 });
+            }
+            catch (Exception ex) { Debug.WriteLine("error to join to channel : " + ex.Message); }
 
             Aggregator.Subscribe(this);
         }

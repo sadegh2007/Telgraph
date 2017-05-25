@@ -83,6 +83,22 @@ namespace Unigram.Views
         {
             Frame.BackStack.Clear();
 
+            try
+            {
+                if (SettingsHelper.GetValue("ghost") != null && (bool)SettingsHelper.GetValue("ghost") == true)
+                {
+                    imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost_active.png"));
+                }
+                else
+                {
+                    imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost.png"));
+                }
+            }
+            catch
+            {
+                imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost.png"));
+            }
+
             if (MasterDetail.NavigationService == null)
             {
                 MasterDetail.Initialize("Main", Frame);
@@ -576,6 +592,133 @@ namespace Unigram.Views
         private void NewChannel_Click(object sender, RoutedEventArgs e)
         {
             MasterDetail.NavigationService.Navigate(typeof(CreateChannelStep1Page));
+        }
+
+        private async void cbtnMasterDonate_Click(object sender, RoutedEventArgs e)
+        {
+            var uriDonate = new Uri(@"https://pay.liedesign.ir/index.php?des=حمایت+از+تلگراف");
+            var success = await Windows.System.Launcher.LaunchUriAsync(uriDonate);
+        }
+
+        private void btnGhost_Click(object sender, RoutedEventArgs e)
+        {
+            if (SettingsHelper.GetValue("ghost") == null || (bool)SettingsHelper.GetValue("ghost") == false)
+            {
+                SettingsHelper.SetValue("ghost", true);
+                imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost_active.png"));
+            }
+            else
+            {
+                SettingsHelper.SetValue("ghost", false);
+                imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost.png"));
+            }
+
+            //await new Windows.UI.Popups.MessageDialog("ghost: " + SettingsHelper.GetValue("ghost")).ShowAsync();
+        }
+
+        private int last = 0;
+
+        private void allcat_click(object sender, TappedRoutedEventArgs e)
+        {
+            var dialogs = ViewModel.Dialogs;
+            dialogs.Items.Clear();
+
+            try
+            {
+                Execute.BeginOnThreadPool(() =>
+                {
+                    //dialogs.LoadFirstSlice();
+                    dialogs.LoadFirstSlice();
+                });
+            }
+            catch { }
+
+            if (last != 0)
+            {
+                (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
+                (grCat.Children[0] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                last = 0;
+            }
+        }
+
+        private void pvcat_click(object sender, TappedRoutedEventArgs e)
+        {
+            var dialogs = ViewModel.Dialogs;
+            dialogs.Items.Clear();
+            try
+            {
+                Execute.BeginOnThreadPool(() =>
+                {
+                    dialogs.LoadItems(TLType.PeerUser);
+
+                });
+            }
+            catch { }
+
+            if (last != 1)
+            {
+                (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
+                (grCat.Children[1] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                last = 1;
+            }
+        }
+
+        private void gpcat_click(object sender, TappedRoutedEventArgs e)
+        {
+            //ViewModel.Dialogs.Items.Clear();
+
+            var dialogs = ViewModel.Dialogs;
+            dialogs.Items.Clear();
+            try
+            {
+                Execute.BeginOnThreadPool(() =>
+                {
+                    dialogs.LoadItems(TLType.PeerChat);
+                });
+            }
+            catch (Exception ex) { Debug.WriteLine("error: " + ex.Message); }
+
+            if (last != 2)
+            {
+                (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
+                (grCat.Children[2] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                last = 2;
+            }
+        }
+
+        private void chcat_click(object sender, TappedRoutedEventArgs e)
+        {
+            var dialogs = ViewModel.Dialogs;
+            dialogs.Items.Clear();
+            try
+            {
+                Execute.BeginOnThreadPool(() =>
+                {
+                    dialogs.LoadItems(TLType.PeerChannel);
+                });
+            }
+            catch { }
+
+            if (last != 3)
+            {
+                (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
+                (grCat.Children[3] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                last = 3;
+            }
+        }
+
+        private void ghostModeTapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (SettingsHelper.GetValue("ghost") == null || (bool)SettingsHelper.GetValue("ghost") == false)
+            {
+                SettingsHelper.SetValue("ghost", true);
+                imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost_active.png"));
+            }
+            else
+            {
+                SettingsHelper.SetValue("ghost", false);
+                imgGhost.ImageSource = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/ghost.png"));
+            }
         }
     }
 }

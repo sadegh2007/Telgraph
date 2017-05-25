@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About-App-Title.Text" xml:space="preserve">
-    <value>Unigram</value>
+    <value>Telgraph</value>
     <comment>About - App info - App Name</comment>
   </data>
   <data name="About-App-Version.Text" xml:space="preserve">
@@ -138,7 +138,7 @@
     <comment>About - Titlebar - Page Title</comment>
   </data>
   <data name="About-Thanks-Intro.Text" xml:space="preserve">
-    <value>Thank you for using Unigram! We woudn't have been able to get this far without all help of the community.</value>
+    <value>Thank you for using Telgraph! We woudn't have been able to get this far without all help of the community.</value>
     <comment>About - Thanks - Intro</comment>
   </data>
   <data name="CBTN-About.Label" xml:space="preserve">
@@ -162,15 +162,15 @@
     <comment>AppBarButton - Label - Settings</comment>
   </data>
   <data name="Home-Titlebar-Title.Text" xml:space="preserve">
-    <value>UNIGRAM</value>
+    <value>TELGRAPH</value>
     <comment>Home - Titlebar - Page Title</comment>
   </data>
   <data name="Login-Titlebar-Title.Text" xml:space="preserve">
-    <value>WELCOME TO UNIGRAM</value>
+    <value>WELCOME TO TELGRAPH</value>
     <comment>Login - Titlebar - Page Title</comment>
   </data>
   <data name="Settings-Settings-LocationPermission.Header" xml:space="preserve">
-    <value>Let Unigram use your location</value>
+    <value>Let Telgraph use your location</value>
     <comment>Settings - Settings - ToggleSwitch - Permission for Location </comment>
   </data>
   <data name="Settings-Settings-SyncPeopleHub.Header" xml:space="preserve">
@@ -206,7 +206,7 @@
     <comment>Login - Code - Title</comment>
   </data>
   <data name="Login-Intro-Intro.Text" xml:space="preserve">
-    <value>Unigram is an UWP Telegram-app build by the Windows Community, for the Windows community</value>
+    <value>Telgraph base on unigram is an UWP Telegram-app build by Sadeq Hajizadeh.</value>
     <comment>Login - App Intro - Intro Text</comment>
   </data>
   <data name="Login-PhoneNumber-Country.Header" xml:space="preserve">

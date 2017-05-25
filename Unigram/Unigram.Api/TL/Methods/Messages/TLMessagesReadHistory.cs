@@ -28,8 +28,17 @@ namespace Telegram.Api.TL.Methods.Messages
 
 		public override void Write(TLBinaryWriter to)
 		{
-			to.Write(0xE306D3A);
-			to.WriteObject(Peer);
+            try
+            {
+                if (Helpers.SettingsHelper.GetValue("ghost") == null || (bool)Helpers.SettingsHelper.GetValue("ghost") == false)
+                {
+                    to.Write(0xE306D3A);
+                }
+            }
+            catch (Exception) { to.Write(0xE306D3A); }
+
+            //to.Write(0xE306D3A);
+            to.WriteObject(Peer);
 			to.Write(MaxId);
 		}
 	}

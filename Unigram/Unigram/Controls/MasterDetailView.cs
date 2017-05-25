@@ -13,7 +13,6 @@ using Unigram.Core.Services;
 using Unigram.Views.Users;
 using System.Diagnostics;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Input;
 
 // The Templated Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234235
 
@@ -34,8 +33,8 @@ namespace Unigram.Controls
         public MasterDetailView()
         {
             DefaultStyleKey = typeof(MasterDetailView);
-
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
             SizeChanged += OnSizeChanged;
         }
 
@@ -61,6 +60,13 @@ namespace Unigram.Controls
             {
                 ViewStateChanged(this, EventArgs.Empty);
             }
+
+            Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated += OnAcceleratorKeyActivated;
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated -= OnAcceleratorKeyActivated;
         }
 
         private void UpdateVisualState()
@@ -92,19 +98,15 @@ namespace Unigram.Controls
             }
         }
 
-        protected override void OnKeyDown(KeyRoutedEventArgs e)
+        private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs args)
         {
-            if (e.Key == VirtualKey.Escape)
+            if ((args.EventType == CoreAcceleratorKeyEventType.SystemKeyDown || args.EventType == CoreAcceleratorKeyEventType.KeyDown) && (args.VirtualKey == VirtualKey.Escape))
             {
                 if (DetailFrame.CanGoBack && CurrentState == MasterDetailState.Narrow)
                 {
                     DetailFrame.GoBack();
-                    e.Handled = true;
+                    args.Handled = true;
                 }
-            }
-            else
-            {
-                base.OnKeyDown(e);
             }
         }
 

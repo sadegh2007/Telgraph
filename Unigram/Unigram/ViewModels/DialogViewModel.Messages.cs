@@ -262,6 +262,24 @@ namespace Unigram.ViewModels
 
         #endregion
 
+        #region Forward Widthou Name
+
+        public RelayCommand<TLMessageBase> MessageForwardWithoutNameCommand => new RelayCommand<TLMessageBase>(MessageForwardWNExecute);
+        private void MessageForwardWNExecute(TLMessageBase message)
+        {
+            if (message is TLMessage)
+            {
+                //await ShareView.Current.ShowAsync(new TLStickerSet());
+                //return;
+                message.wn = true;
+
+                App.InMemoryState.ForwardMessages = new List<TLMessage> { message as TLMessage };
+                NavigationService.GoBackAt(0);
+            }
+        }
+
+        #endregion
+
         #region Multiple Delete
 
         private RelayCommand _messagesDeleteCommand;
@@ -407,6 +425,35 @@ namespace Unigram.ViewModels
             if (messages.Count > 0)
             {
                 App.InMemoryState.ForwardMessages = new List<TLMessage>(messages);
+                NavigationService.GoBackAt(0);
+            }
+
+            //_stateService.ForwardMessages = Messages.Where(x => x.IsSelected).ToList();
+            //_stateService.ForwardMessages.Reverse();
+
+            //SelectionMode = Windows.UI.Xaml.Controls.ListViewSelectionMode.None;
+            //NavigationService.GoBack();
+        }
+
+        #endregion
+
+        #region Multiple Forward Without Name
+
+        private RelayCommand _messagesForwardWNCommand;
+        public RelayCommand MessagesForwardWNCommand => _messagesForwardWNCommand = (_messagesForwardWNCommand ?? new RelayCommand(MessagesForwardWNExecute, () => SelectedMessages.Count > 0 && SelectedMessages.All(x => x is TLMessage)));
+
+        private void MessagesForwardWNExecute()
+        {
+            var messages = SelectedMessages.OfType<TLMessage>().Where(x => x.Id != 0).OrderBy(x => x.Id).ToList();
+            if (messages.Count > 0)
+            {
+                List<TLMessage> msgs = new List<TLMessage>();
+                foreach (var msg in messages)
+                {
+                    msg.wn = true;
+                    msgs.Add(msg);
+                }
+                App.InMemoryState.ForwardMessages = new List<TLMessage>(msgs);
                 NavigationService.GoBackAt(0);
             }
 

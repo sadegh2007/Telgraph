@@ -1138,10 +1138,13 @@ namespace Unigram.ViewModels
             var msgs = new TLVector<TLMessage>();
             var msgIds = new TLVector<int>();
 
+            var wn = false;
+
             foreach (var fwdMessage in forwardMessages)
             {
                 var clone = fwdMessage.Clone();
                 clone.Id = 0;
+                clone.wn = wn = clone.wn;
                 clone.HasReplyToMsgId = false;
                 clone.ReplyToMsgId = null;
                 clone.HasReplyMarkup = false;
@@ -1201,7 +1204,43 @@ namespace Unigram.ViewModels
                         var fwdChannel = CacheService.GetChat(fwdMessage.ToId.Id) as TLChannel;
                         if (fwdChannel != null && fwdChannel.IsMegaGroup)
                         {
-                            clone.HasFwdFrom = true;
+                            clone.HasFwdFrom = !clone.wn;
+                            if (clone.wn == false)
+                            {
+                                clone.FwdFrom = new TLMessageFwdHeader
+                                {
+                                    HasFromId = true,
+                                    FromId = fwdMessage.FromId,
+                                    Date = fwdMessage.Date
+                                };
+                            }
+                        }
+                        else
+                        {
+                            clone.HasFwdFrom = !clone.wn;
+                            if (clone.wn == false)
+                            {
+                                clone.FwdFrom = new TLMessageFwdHeader
+                                {
+                                    HasFromId = fwdMessage.HasFromId,
+                                    FromId = fwdMessage.FromId,
+                                    Date = fwdMessage.Date
+                                };
+
+                                if (fwdChannel.IsBroadcast)
+                                {
+                                    clone.FwdFrom.HasChannelId = clone.FwdFrom.HasChannelPost = true;
+                                    clone.FwdFrom.ChannelId = fwdChannel.Id;
+                                    clone.FwdFrom.ChannelPost = fwdMessage.Id;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        clone.HasFwdFrom = !clone.wn;
+                        if (clone.wn)
+                        {
                             clone.FwdFrom = new TLMessageFwdHeader
                             {
                                 HasFromId = true,
@@ -1209,33 +1248,6 @@ namespace Unigram.ViewModels
                                 Date = fwdMessage.Date
                             };
                         }
-                        else
-                        {
-                            clone.HasFwdFrom = true;
-                            clone.FwdFrom = new TLMessageFwdHeader
-                            {
-                                HasFromId = fwdMessage.HasFromId,
-                                FromId = fwdMessage.FromId,
-                                Date = fwdMessage.Date
-                            };
-
-                            if (fwdChannel.IsBroadcast)
-                            {
-                                clone.FwdFrom.HasChannelId = clone.FwdFrom.HasChannelPost = true;
-                                clone.FwdFrom.ChannelId = fwdChannel.Id;
-                                clone.FwdFrom.ChannelPost = fwdMessage.Id;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        clone.HasFwdFrom = true;
-                        clone.FwdFrom = new TLMessageFwdHeader
-                        {
-                            HasFromId = true,
-                            FromId = fwdMessage.FromId,
-                            Date = fwdMessage.Date
-                        };
                     }
                 }
 
@@ -1243,12 +1255,93 @@ namespace Unigram.ViewModels
                 msgIds.Add(fwdMessage.Id);
 
                 Messages.Add(clone);
+
+                if (clone.wn)
+                {
+                    try
+                    {
+                        CacheService.SyncSendingMessages(msgs, null, async (_) =>
+                        {
+                            if (clone.Media.GetType() == typeof(TLMessageMediaEmpty))
+                            {
+                                await ProtoService.SendMessageAsync(clone, null);
+                            }
+                            else
+                            {
+                                if (clone.Media.GetType() == typeof(TLMessageMediaPhoto))
+                                {
+                                    TLInputMediaBase input = new TLInputMediaPhoto
+                                    {
+                                        Caption = ((TLMessageMediaPhoto)clone.Media).Caption,
+                                        Id = ((TLMessageMediaPhoto)clone.Media).Photo.ToInputPhoto()
+                                    };
+
+                                    await ProtoService.SendMediaAsync(Peer, input, clone);
+                                }
+                                else if (clone.Media.GetType() == typeof(TLMessageMediaDocument))
+                                {
+                                    TLInputMediaBase input = new TLInputMediaDocument
+                                    {
+                                        Caption = ((TLMessageMediaDocument)clone.Media).Caption,
+                                        Id = ((TLMessageMediaDocument)clone.Media).Document.ToInputDocument()
+                                    };
+
+                                    await ProtoService.SendMediaAsync(Peer, input, clone);
+                                }
+                                else if (clone.Media.GetType() == typeof(TLMessageMediaContact))
+                                {
+                                    var input = new TLInputMediaContact
+                                    {
+                                        FirstName = ((TLMessageMediaContact)clone.Media).FirstName,
+                                        LastName = ((TLMessageMediaContact)clone.Media).LastName,
+                                        PhoneNumber = ((TLMessageMediaContact)clone.Media).PhoneNumber,
+                                    };
+
+                                    await ProtoService.SendMediaAsync(Peer, input, clone);
+                                }
+                                else if (clone.Media.GetType() == typeof(TLMessageMediaGeo))
+                                {
+                                    var input = new TLInputMediaGeoPoint
+                                    {
+                                        GeoPoint = new TLInputGeoPoint
+                                        {
+                                            Lat = ((TLGeoPoint)((TLMessageMediaVenue)clone.Media).Geo).Lat,
+                                            Long = ((TLGeoPoint)((TLMessageMediaVenue)clone.Media).Geo).Long
+                                        }
+                                    };
+                                    await ProtoService.SendMediaAsync(Peer, input, clone);
+                                }
+                                else if (clone.Media.GetType() == typeof(TLMessageMediaVenue))
+                                {
+                                    var input = new TLInputMediaVenue
+                                    {
+                                        Address = ((TLMessageMediaVenue)clone.Media).Address,
+                                        Title = ((TLMessageMediaVenue)clone.Media).Title,
+                                        VenueId = ((TLMessageMediaVenue)clone.Media).VenueId,
+                                        Provider = ((TLMessageMediaVenue)clone.Media).Provider,
+                                        GeoPoint = new TLInputGeoPoint
+                                        {
+                                            Lat = ((TLGeoPoint)((TLMessageMediaVenue)clone.Media).Geo).Lat,
+                                            Long = ((TLGeoPoint)((TLMessageMediaVenue)clone.Media).Geo).Long
+                                        }
+                                    };
+                                    await ProtoService.SendMediaAsync(Peer, input, clone);
+                                }
+
+                            }
+                        });
+                    }
+                    catch (Exception ex) { Debug.WriteLine("Error: " + ex.Message); }
+                }
             }
 
-            CacheService.SyncSendingMessages(msgs, null, async (_) =>
+            if (wn == false)
             {
-                await ProtoService.ForwardMessagesAsync(Peer, fromPeer, msgIds, msgs, false);
-            });
+                CacheService.SyncSendingMessages(msgs, null, async (_) =>
+                {
+                    await ProtoService.ForwardMessagesAsync(Peer, fromPeer, msgIds, msgs, false);
+                });
+            }
         }
 
         private TLMessageBase InsertSendingMessage(TLMessage message, bool useReplyMarkup = false)

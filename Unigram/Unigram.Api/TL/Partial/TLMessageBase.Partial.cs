@@ -23,6 +23,8 @@ namespace Telegram.Api.TL
 
         public TLMessageBase Reply { get; set; }
 
+        public bool wn { get; set; }
+
         //public virtual ReplyInfo ReplyInfo
         //{
         //    get { return null; }
@@ -886,6 +888,7 @@ namespace Telegram.Api.TL
         {
             var clone = new TLMessage();
             clone.Flags = Flags;
+            clone.wn = wn;
             clone.Id = Id;
             clone.FromId = FromId;
             clone.ToId = ToId;

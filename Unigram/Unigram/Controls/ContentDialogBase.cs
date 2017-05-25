@@ -20,7 +20,6 @@ using Windows.Foundation.Metadata;
 using Template10.Services.NavigationService;
 using Template10.Services.ViewService;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Input;
 
 namespace Unigram.Controls
 {
@@ -105,19 +104,6 @@ namespace Unigram.Controls
                 var statusBar = StatusBar.GetForCurrentView();
                 statusBar.BackgroundColor = backgroundBrush.Color;
                 statusBar.ForegroundColor = foregroundBrush.Color;
-            }
-        }
-
-        protected override void OnKeyDown(KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Escape)
-            {
-                Hide();
-                e.Handled = true;
-            }
-            else
-            {
-                base.OnKeyDown(e);
             }
         }
 

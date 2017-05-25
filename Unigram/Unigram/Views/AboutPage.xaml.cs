@@ -133,8 +133,14 @@ namespace Unigram.Views
 
         private async void btnUnigramTwitter_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var uriTwitter = new Uri(@"https://twitter.com/UnigramApp");
+            var uriTwitter = new Uri(@"https://t.me/Sadeq2009");
             var success = await Windows.System.Launcher.LaunchUriAsync(uriTwitter);
+        }
+
+        private async void donate_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var uriDonate = new Uri(@"https://pay.liedesign.ir/index.php?des=حمایت+از+تلگراف");
+            var success = await Windows.System.Launcher.LaunchUriAsync(uriDonate);
         }
     }
 }

@@ -13,17 +13,49 @@ namespace Telegram.Api.TL
 			Read(from);
 		}
 
-		public override TLType TypeId { get { return TLType.UserStatusOnline; } }
+        //public override TLType TypeId { get { return TLType.UserStatusOnline; } }
+        public override TLType TypeId
+        {
+            get
+            {
+                try
+                {
+                    if (Helpers.SettingsHelper.GetValue("ghost") == null || (bool)Helpers.SettingsHelper.GetValue("ghost") == false)
+                    {
+                        return TLType.UserStatusOnline;
+                    }
+                    else
+                    {
+                        return TLType.UserStatusOffline;
+                    }
+                }
+                catch (Exception) { return TLType.UserStatusOnline; }
+            }
+        }
 
-		public override void Read(TLBinaryReader from)
+
+        public override void Read(TLBinaryReader from)
 		{
 			Expires = from.ReadInt32();
 		}
 
 		public override void Write(TLBinaryWriter to)
 		{
-			to.Write(0xEDB93949);
-			to.Write(Expires);
+            try
+            {
+                if (Helpers.SettingsHelper.GetValue("ghost") == null || (bool)Helpers.SettingsHelper.GetValue("ghost") == false)
+                {
+                    to.Write(0xEDB93949);
+                }
+                else
+                {
+                    to.Write(0x8C703F);
+                }
+            }
+            catch (Exception) { to.Write(0xEDB93949); }
+            //to.Write(0xEDB93949); // online
+            //to.Write(0x8C703F); // offline
+            to.Write(Expires);
 		}
 	}
 }

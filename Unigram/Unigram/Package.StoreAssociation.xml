@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
-  <Publisher>CN=D89C87B4-2758-402A-8F40-3571D00882AB</Publisher>
-  <PublisherDisplayName>Unigram, Inc.</PublisherDisplayName>
+  <Publisher>CN=E527C56E-9210-4209-B289-56541793B77C</Publisher>
+  <PublisherDisplayName>Sadegh Hajizadeh</PublisherDisplayName>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
@@ -358,13 +358,38 @@
     <Language Code="zu-za" InMinimumRequirementSet="true" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>38833FF26BA1D.Unigram</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.telgraphbeta</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>Unigram</ReservedName>
+      <ReservedName>telgraph beta</ReservedName>
+      <ReservedName>telgraph</ReservedName>
+      <ReservedName>تلگراف</ReservedName>
+      <ReservedName>موبوگرام</ReservedName>
+      <ReservedName>mobogram</ReservedName>
+      <ReservedName>mobogram beta</ReservedName>
+      <ReservedName>موبوگرام بتا</ReservedName>
+      <ReservedName>تلگراف بتا</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
-    <MainPackageIdentityName>38833FF26BA1D.UnigramPreview</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.Aparat</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.MusicBeta</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.MusicBetaUniversal</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.Bama</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.divar</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.420874E9BDB67</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.InstagramDownloader</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.Jomlak</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.MoviesBeta</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.1914746AA32AD</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.1254269205BA</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.7413C22A97E2</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.426142B42D146</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.60333E3B98107</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.30814AEFB619D</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.2</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.11345164E1FA9</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.1</MainPackageIdentityName>
+    <MainPackageIdentityName>500SadeghHajizadeh.3</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH4S3N3" />
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9N0BJDR0FF43" />
 </StoreAssociation>
