@@ -6,8 +6,8 @@ Bring native and full feature UWP experience of Telegram + Platform specific fea
 
 
 Credits:
-Rick Drijvers (Project founder -Unigram)
-Fela Amenghino (Head Dev -Unigram)
+[Rick Drijvers](https://github.com/ikarago) (Project founder -Unigram)
+[Fela Amenghino](https://github.com/FrayxRulez) (Head Dev -Unigram)
 And all Unigram developers and insiders.
 
-Special thanks to @Mohsens22
+Special thanks to [mohsen seifi](https://github.com/mohsens22)
