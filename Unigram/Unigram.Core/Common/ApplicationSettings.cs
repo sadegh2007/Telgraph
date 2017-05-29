@@ -6,6 +6,7 @@ using System.Threading;
 using Windows.Storage;
 using Telegram.Api.TL;
 using Unigram.Core.Services;
+using Telegram.Api.Services;
 
 namespace Unigram.Common
 {
@@ -128,6 +129,23 @@ namespace Unigram.Common
             }
         }
 
+        private bool? _isConfirmEnabled;
+        public bool IsConfirmEnabled
+        {
+            get
+            {
+                if (_isConfirmEnabled == null)
+                    _isConfirmEnabled = GetValueOrDefault("IsConfirmEnabled", true);
+
+                return _isConfirmEnabled ?? true;
+            }
+            set
+            {
+                _isConfirmEnabled = value;
+                AddOrUpdateValue("IsConfirmEnabled", value);
+            }
+        }
+
         private TLAccountTmpPassword _tmpPassword;
         public TLAccountTmpPassword TmpPassword
         {
@@ -151,5 +169,50 @@ namespace Unigram.Common
                 _tmpPassword = value;
             }
         }
+
+        public ApplicationSettingsDownload AutoDownload => new ApplicationSettingsDownload();
+    }
+
+    public class ApplicationSettingsDownload
+    {
+        private int[] _defaults = new int[3];
+
+        public ApplicationSettingsDownload()
+        {
+            _defaults[(int)NetworkType.Mobile] = (int)(AutoDownloadType.Photo | AutoDownloadType.Audio | AutoDownloadType.Music | AutoDownloadType.GIF | AutoDownloadType.Round);
+            _defaults[(int)NetworkType.WiFi] = (int)(AutoDownloadType.Photo | AutoDownloadType.Audio | AutoDownloadType.Music | AutoDownloadType.GIF | AutoDownloadType.Round);
+            _defaults[(int)NetworkType.Roaming] = 0;
+        }
+
+        private AutoDownloadType?[] _autoDownload = new AutoDownloadType?[3];
+        public AutoDownloadType this[NetworkType index]
+        {
+            get
+            {
+                var i = (int)index;
+                if (_autoDownload[i] == null)
+                    _autoDownload[i] = (AutoDownloadType)ApplicationSettings.Current.GetValueOrDefault("auto_download_" + i, _defaults[(int)index]);
+
+                return _autoDownload[i].Value;
+            }
+            set
+            {
+                var i = (int)index;
+                _autoDownload[i] = value;
+                ApplicationSettings.Current.AddOrUpdateValue("auto_download_" + i, (int)value);
+            }
+        }
+    }
+
+    [Flags]
+    public enum AutoDownloadType
+    {
+        Photo = 1,
+        Audio = 2,
+        Video = 4,
+        Document = 8,
+        Music = 16,
+        GIF = 32,
+        Round = 64,
     }
 }

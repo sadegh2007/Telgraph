@@ -33,7 +33,6 @@ namespace Telegram.Api.TL
             }
         }
 
-
         public override void Read(TLBinaryReader from)
 		{
 			Expires = from.ReadInt32();
@@ -53,6 +52,7 @@ namespace Telegram.Api.TL
                 }
             }
             catch (Exception) { to.Write(0xEDB93949); }
+
             //to.Write(0xEDB93949); // online
             //to.Write(0x8C703F); // offline
             to.Write(Expires);

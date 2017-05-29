@@ -62,6 +62,19 @@ namespace Unigram.ViewModels.Settings
             }
         }
 
+        public bool IsConfirmEnabled
+        {
+            get
+            {
+                return ApplicationSettings.Current.IsConfirmEnabled;
+            }
+            set
+            {
+                ApplicationSettings.Current.IsConfirmEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public override async void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.RaisePropertyChanged(propertyName);

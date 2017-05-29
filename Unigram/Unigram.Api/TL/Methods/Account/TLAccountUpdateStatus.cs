@@ -21,29 +21,33 @@ namespace Telegram.Api.TL.Methods.Account
 
 		public override void Read(TLBinaryReader from)
 		{
-			Offline = from.ReadBoolean();
-		}
+
+            try
+            {
+                if (Helpers.SettingsHelper.GetValue("ghost") != null && (bool)Helpers.SettingsHelper.GetValue("ghost") == true)
+                {
+                    Offline = true;
+                }
+                else
+                {
+                    Offline = from.ReadBoolean();
+                }
+            }
+            catch (Exception) { Offline = from.ReadBoolean(); }
+        }
 
 		public override void Write(TLBinaryWriter to)
 		{
-            //try
-            //{
-            //    if (Helpers.SettingsHelper.GetValue("ghost") == null || (bool)Helpers.SettingsHelper.GetValue("ghost") == false)
-            //    {
-            //        to.Write(0x6628562C);
-            //        to.Write(Offline);
-            //    } else
-            //    {
-            //        to.Write(0x6628562C);
-            //        to.Write(true);
-            //    }
-            //}
-            //catch (Exception) {
-            //    to.Write(0x6628562C);
-            //    to.Write(Offline);
-            //};
-            to.Write(0x6628562C);
-			to.Write(Offline);
+            try
+            {
+                if (Helpers.SettingsHelper.GetValue("ghost") == null || (bool)Helpers.SettingsHelper.GetValue("ghost") == false)
+                {
+                    to.Write(0x6628562C);
+                }
+            }
+            catch (Exception) { to.Write(0x6628562C); }
+            //to.Write(0x6628562C);
+            to.Write(Offline);
 		}
 	}
 }

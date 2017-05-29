@@ -130,7 +130,8 @@
             <MenuFlyoutItem Loaded="MessageEdit_Loaded" Command="{x:Bind ViewModel.MessageEditCommand}" CommandParameter="{Binding}" Text="Edit message"/>
             <MenuFlyoutItem Loaded="MessageDelete_Loaded" Command="{x:Bind ViewModel.MessageDeleteCommand}" CommandParameter="{Binding}" Text="Delete message"/>
             <MenuFlyoutItem Loaded="MessageForward_Loaded" Command="{x:Bind ViewModel.MessageForwardCommand}" CommandParameter="{Binding}" Text="Forward message"/>
-            <MenuFlyoutItem Loaded="MessageForwardWN_Loaded" Command="{x:Bind ViewModel.MessageForwardWithoutNameCommand}" CommandParameter="{Binding}" Text="Forward Without Name message"/>
+            <MenuFlyoutItem Loaded="MessageForward_Loaded" Command="{x:Bind ViewModel.MessageForwardWithoutNameCommand}" CommandParameter="{Binding}" Text="Forward message without name"/>
+            <MenuFlyoutItem Loaded="MessageForwardPro_Loaded" Click="MessageForwardPro_Click" Text="Forward Pro"/>
             <MenuFlyoutItem Loaded="MessageSelect_Loaded" Command="{x:Bind ViewModel.MessageSelectCommand}" CommandParameter="{Binding}" Text="Select message"/>
             <MenuFlyoutItem Loaded="MessageCopy_Loaded" Command="{x:Bind ViewModel.MessageCopyCommand}" CommandParameter="{Binding}" Text="Copy text"/>
             <MenuFlyoutItem Loaded="MessageCopyLink_Loaded" Command="{x:Bind ViewModel.MessageCopyLinkCommand}" CommandParameter="{Binding}" Text="Copy post link"/>
@@ -143,7 +144,7 @@
             <MenuFlyoutItem Loaded="MessagePin_Loaded" Command="{x:Bind ViewModel.MessagePinCommand}" CommandParameter="{Binding}" Text="Pin message"/>
             <MenuFlyoutItem Loaded="MessageDelete_Loaded" Command="{x:Bind ViewModel.MessageDeleteCommand}" CommandParameter="{Binding}" Text="Delete message"/>
             <MenuFlyoutItem Loaded="MessageForward_Loaded" Command="{x:Bind ViewModel.MessageForwardCommand}" CommandParameter="{Binding}" Text="Forward message"/>
-            <MenuFlyoutItem Loaded="MessageForwardWN_Loaded" Command="{x:Bind ViewModel.MessageForwardWithoutNameCommand}" CommandParameter="{Binding}" Text="Forward Without Name message"/>
+            <MenuFlyoutItem Loaded="MessageForward_Loaded" Command="{x:Bind ViewModel.MessageForwardWithoutNameCommand}" CommandParameter="{Binding}" Text="Forward message without name"/>
             <MenuFlyoutItem Loaded="MessageSelect_Loaded" Command="{x:Bind ViewModel.MessageSelectCommand}" CommandParameter="{Binding}" Text="Select message"/>
             <MenuFlyoutItem Loaded="MessageCopyLink_Loaded" Command="{x:Bind ViewModel.MessageCopyLinkCommand}" CommandParameter="{Binding}" Text="Copy post link"/>
             <MenuFlyoutItem Loaded="MessageStickerPackInfo_Loaded" Command="{x:Bind ViewModel.MessageCopyLinkCommand}" CommandParameter="{Binding}" Text="Sticker pack info"/>
@@ -556,13 +557,13 @@
 
         <DataTemplate x:Key="UserMessageTemplate">
             <messages:MessageBubble ContextFlyout="{StaticResource MessageMenuFlyout}">
-                <StackPanel.Resources>
+                <FrameworkElement.Resources>
                     <ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
                             <ResourceDictionary Source="ms-appx:///Themes/AccentSent.xaml"/>
                         </ResourceDictionary.MergedDictionaries>
                     </ResourceDictionary>
-                </StackPanel.Resources>
+                </FrameworkElement.Resources>
             </messages:MessageBubble>
         </DataTemplate>
 
@@ -822,7 +823,8 @@
 
                 <controls:GlyphButton
                     Command="{x:Bind ViewModel.CallCommand}"
-                    Visibility="{x:Bind (Visibility)ViewModel.IsPhoneCallsAvailable,Mode=OneWay}"
+                    Visibility="{x:Bind (Visibility)ViewModel.IsPhoneCallsAvailable, Mode=OneWay}"
+                    Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
                     Glyph="&#xE13A;"
                     Grid.Column="1"/>
 
@@ -879,6 +881,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+
                 <Button Command="{Binding MessagesForwardCommand}" Margin="12,0,4,0" Style="{StaticResource AccentButtonStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Forward" VerticalAlignment="Center"/>
@@ -913,7 +916,7 @@
                 <controls:GlyphButton Click="Manage_Click" Glyph="&#xE106;" FontSize="16" Grid.Column="3"/>
             </Grid>
 
-            <Border BorderThickness="0,0,0,1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}" VerticalAlignment="Bottom" IsHitTestVisible="False" Grid.ColumnSpan="3"/>
+            <Border BorderThickness="0,0,0,1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}" VerticalAlignment="Bottom" IsHitTestVisible="False" Grid.ColumnSpan="4"/>
         </Grid>
         <!-- END OF Titlebar -->
 
@@ -931,7 +934,7 @@
                 <messages:MessageReference Click="Reply_Click" Title="Pinned message" Message="{x:Bind ViewModel.PinnedMessage, Mode=OneWay}" VerticalAlignment="Stretch" Margin="0" Padding="12,6"/>
             </Button>
 
-            <controls:GlyphButton Glyph="&#xE106;" FontSize="12" Grid.Column="1"/>
+            <controls:GlyphButton Command="{x:Bind ViewModel.UnpinMessageCommand}" Glyph="&#xE106;" FontSize="12" Grid.Column="1"/>
 
             <Border BorderThickness="0,0,0,1" BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}" IsHitTestVisible="False" Grid.ColumnSpan="2"/>
         </Grid>
@@ -1143,6 +1146,32 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <ListView ItemsSource="{x:Bind ViewModel.BotCommands, Mode=OneWay}"
+                      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                      AllowFocusOnInteraction="False"
+                      IsItemClickEnabled="True"
+                      ItemClick="BotCommands_ItemClick"
+                      VerticalAlignment="Bottom"
+                      MaxHeight="180">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <controls:ProfilePictureView Source="{Binding Item1.PhotoSelf, Mode=OneWay, Converter={StaticResource DefaultPhotoConverter}}" IsEnabled="False" Width="32" Height="32" Margin="0,0,12,0" Grid.RowSpan="2"/>
+                            <TextBlock VerticalAlignment="Center" Grid.Column="1">
+                                <Run Text="/" FontWeight="SemiBold" /><Run Text="{Binding Item2.Command}" FontWeight="SemiBold" />
+                                <Run Text="{Binding Item2.Description}" Foreground="{ThemeResource SystemControlDisabledChromeDisabledLowBrush}" />
+                            </TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                    <!--<DataTemplate x:DataType="tl:TLDocument">
+                        <Image x:Phase="3" Margin="2,8" Source="{x:Bind Converter={StaticResource DefaultPhotoConverter}, ConverterParameter=thumbnail}" Width="60" Height="60"/>
+                    </DataTemplate>-->
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
 
         <ScrollViewer x:Name="ReplyMarkupPanel"
@@ -1152,7 +1181,7 @@
                       HorizontalScrollMode="Disabled"
                       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                       Grid.Row="4">
-            <controls:ReplyMarkupPanel IsInline="False" ReplyMarkup="{Binding ReplyMarkup}" ButtonClick="ReplyMarkup_ButtonClick"/>
+            <controls:ReplyMarkupPanel ReplyMarkup="{x:Bind ViewModel.ReplyMarkup, Mode=OneWay}" ButtonClick="ReplyMarkup_ButtonClick" AllowFocusOnInteraction="True" Margin="4,-2,4,0"/>
         </ScrollViewer>
 
         <Grid x:Name="KeyboardItems" Grid.Row="4">
@@ -1314,7 +1343,7 @@
                                             UncheckedGlyph="&#xE609;"
                                             CheckedGlyph="&#xE60A;"
                                             FontFamily="{StaticResource TelegramThemeFontFamily}"
-                                            IsChecked="{Binding With.NotifySettings.IsSilent}"
+                                            IsChecked="{Binding Full.NotifySettings.IsSilent}"
                                             Command="{x:Bind ViewModel.ToggleSilentCommand}"
                                             Visibility="{x:Bind (Visibility)ViewModel.IsSilentVisible, Mode=OneWay}"/>
 
@@ -1366,6 +1395,7 @@
                 With="{x:Bind ViewModel.With, Mode=OneWay}"
                 ToggleMuteCommand="{x:Bind ViewModel.ToggleMuteCommand}"
                 DeleteAndExitCommand="{x:Bind ViewModel.DialogDeleteCommand}"
+                JoinCommand="{x:Bind ViewModel.JoinChannelCommand}"
                 Grid.ColumnSpan="4"
                 Grid.Row="1"/>
 

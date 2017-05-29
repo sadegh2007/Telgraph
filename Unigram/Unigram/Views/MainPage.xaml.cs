@@ -39,10 +39,11 @@ using Unigram.Views.Chats;
 using Windows.System.Profile;
 using Windows.ApplicationModel.Core;
 using Unigram.Core.Services;
+using Telegram.Api.Aggregator;
 
 namespace Unigram.Views
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IHandle<string>
     {
         public MainViewModel ViewModel => DataContext as MainViewModel;
 
@@ -54,6 +55,8 @@ namespace Unigram.Views
             NavigationCacheMode = NavigationCacheMode.Required;
             DataContext = UnigramContainer.Current.ResolveType<MainViewModel>();
 
+            ViewModel.Aggregator.Subscribe(this);
+
             Loaded += OnLoaded;
 
             //Theme.RegisterPropertyChangedCallback(Border.BackgroundProperty, OnThemeChanged);
@@ -61,6 +64,30 @@ namespace Unigram.Views
             searchInit();
 
             InputPane.GetForCurrentView().Showing += (s, args) => args.EnsuredFocusedElementInView = true;
+        }
+
+        public void Handle(string message)
+        {
+            var index = DialogsListView.SelectedIndex;
+            if (index == -1)
+            {
+                return;
+            }
+
+            if (message.Equals("move_up"))
+            {
+                index--;
+            }
+            else if (message.Equals("move_down"))
+            {
+                index++;
+            }
+
+            if (index >= 0 && index < ViewModel.Dialogs.Items.Count)
+            {
+                DialogsListView.SelectedIndex = index;
+                Navigate(DialogsListView.SelectedItem);
+            }
         }
 
         //private async void OnThemeChanged(DependencyObject sender, DependencyProperty dp)
@@ -269,35 +296,40 @@ namespace Unigram.Views
             var listView = sender as ListView;
             if (listView.SelectionMode != ListViewSelectionMode.Multiple)
             {
-                _lastSelected = e.ClickedItem;
+                Navigate(e.ClickedItem);
+            }
+        }
 
-                if (e.ClickedItem is TLDialog dialog)
-                {
-                    if (dialog.IsSearchResult)
-                    {
-                        MasterDetail.NavigationService.Navigate(typeof(DialogPage), Tuple.Create(dialog.Peer, dialog.TopMessage));
-                    }
-                    else
-                    {
-                        MasterDetail.NavigationService.Navigate(typeof(DialogPage), dialog.Peer);
-                    }
-                }
+        private void Navigate(object item)
+        {
+            _lastSelected = item;
 
-                if (e.ClickedItem is TLMessageCommonBase message)
+            if (item is TLDialog dialog)
+            {
+                if (dialog.IsSearchResult)
                 {
-                    var peer = message.IsOut || message.ToId is TLPeerChannel || message.ToId is TLPeerChat ? message.ToId : new TLPeerUser { UserId = message.FromId.Value };
-                    MasterDetail.NavigationService.Navigate(typeof(DialogPage), Tuple.Create(peer, message.Id));
+                    MasterDetail.NavigationService.Navigate(typeof(DialogPage), Tuple.Create(dialog.Peer, dialog.TopMessage));
                 }
+                else
+                {
+                    MasterDetail.NavigationService.Navigate(typeof(DialogPage), dialog.Peer);
+                }
+            }
 
-                if (e.ClickedItem is TLUser user)
-                {
-                    MasterDetail.NavigationService.Navigate(typeof(DialogPage), new TLPeerUser { UserId = user.Id });
-                }
+            if (item is TLMessageCommonBase message)
+            {
+                var peer = message.IsOut || message.ToId is TLPeerChannel || message.ToId is TLPeerChat ? message.ToId : new TLPeerUser { UserId = message.FromId.Value };
+                MasterDetail.NavigationService.Navigate(typeof(DialogPage), Tuple.Create(peer, message.Id));
+            }
 
-                if (e.ClickedItem is TLChannel channel)
-                {
-                    MasterDetail.NavigationService.Navigate(typeof(DialogPage), new TLPeerChannel { ChannelId = channel.Id });
-                }
+            if (item is TLUser user)
+            {
+                MasterDetail.NavigationService.Navigate(typeof(DialogPage), new TLPeerUser { UserId = user.Id });
+            }
+
+            if (item is TLChannel channel)
+            {
+                MasterDetail.NavigationService.Navigate(typeof(DialogPage), new TLPeerChannel { ChannelId = channel.Id });
             }
         }
 
@@ -425,7 +457,7 @@ namespace Unigram.Views
             {
                 Execute.BeginOnThreadPool(() =>
                 {
-                    dialogs.LoadFirstSlice();
+                    //dialogs.LoadFirstSlice();
                     contacts.LoadContacts();
                 });
 
@@ -594,12 +626,6 @@ namespace Unigram.Views
             MasterDetail.NavigationService.Navigate(typeof(CreateChannelStep1Page));
         }
 
-        private async void cbtnMasterDonate_Click(object sender, RoutedEventArgs e)
-        {
-            var uriDonate = new Uri(@"https://pay.liedesign.ir/index.php?des=حمایت+از+تلگراف");
-            var success = await Windows.System.Launcher.LaunchUriAsync(uriDonate);
-        }
-
         private void btnGhost_Click(object sender, RoutedEventArgs e)
         {
             if (SettingsHelper.GetValue("ghost") == null || (bool)SettingsHelper.GetValue("ghost") == false)
@@ -628,7 +654,8 @@ namespace Unigram.Views
                 Execute.BeginOnThreadPool(() =>
                 {
                     //dialogs.LoadFirstSlice();
-                    dialogs.LoadFirstSlice();
+                    dialogs.LoadItems(DialogsViewModel.ChatTypeSel.ALL);
+
                 });
             }
             catch { }
@@ -636,7 +663,7 @@ namespace Unigram.Views
             if (last != 0)
             {
                 (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
-                (grCat.Children[0] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                (grCat.Children[0] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 29, 49, 83));
                 last = 0;
             }
         }
@@ -649,7 +676,7 @@ namespace Unigram.Views
             {
                 Execute.BeginOnThreadPool(() =>
                 {
-                    dialogs.LoadItems(TLType.PeerUser);
+                    dialogs.LoadItems(DialogsViewModel.ChatTypeSel.PV);
 
                 });
             }
@@ -658,7 +685,7 @@ namespace Unigram.Views
             if (last != 1)
             {
                 (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
-                (grCat.Children[1] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                (grCat.Children[1] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 29, 49, 83));
                 last = 1;
             }
         }
@@ -673,7 +700,7 @@ namespace Unigram.Views
             {
                 Execute.BeginOnThreadPool(() =>
                 {
-                    dialogs.LoadItems(TLType.PeerChat);
+                    dialogs.LoadItems(DialogsViewModel.ChatTypeSel.GROUP);
                 });
             }
             catch (Exception ex) { Debug.WriteLine("error: " + ex.Message); }
@@ -681,7 +708,7 @@ namespace Unigram.Views
             if (last != 2)
             {
                 (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
-                (grCat.Children[2] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                (grCat.Children[2] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 29, 49, 83));
                 last = 2;
             }
         }
@@ -694,7 +721,7 @@ namespace Unigram.Views
             {
                 Execute.BeginOnThreadPool(() =>
                 {
-                    dialogs.LoadItems(TLType.PeerChannel);
+                    dialogs.LoadItems(DialogsViewModel.ChatTypeSel.CHANNEL);
                 });
             }
             catch { }
@@ -702,8 +729,29 @@ namespace Unigram.Views
             if (last != 3)
             {
                 (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
-                (grCat.Children[3] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 145, 145));
+                (grCat.Children[3] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 29, 49, 83));
                 last = 3;
+            }
+        }
+
+        private void botcat_click(object sender, TappedRoutedEventArgs e)
+        {
+            var dialogs = ViewModel.Dialogs;
+            dialogs.Items.Clear();
+            try
+            {
+                Execute.BeginOnThreadPool(() =>
+                {
+                    dialogs.LoadItems(DialogsViewModel.ChatTypeSel.BOT);
+                });
+            }
+            catch { }
+
+            if (last != 4)
+            {
+                (grCat.Children[last] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 218, 218, 218));
+                (grCat.Children[4] as Grid).Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 29, 49, 83));
+                last = 4;
             }
         }
 

@@ -100,7 +100,7 @@
                             Padding="0,4"
                             Style="{ThemeResource TextBlockButtonStyle}"
                             Click="donate_Click"/>
-                   
+
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About-App-Title.Text" xml:space="preserve">
-    <value>Telgraph</value>
+    <value>Unigram</value>
     <comment>About - App info - App Name</comment>
   </data>
   <data name="About-App-Version.Text" xml:space="preserve">
@@ -138,7 +138,7 @@
     <comment>About - Titlebar - Page Title</comment>
   </data>
   <data name="About-Thanks-Intro.Text" xml:space="preserve">
-    <value>Thank you for using Telgraph! We woudn't have been able to get this far without all help of the community.</value>
+    <value>Thank you for using Unigram! We woudn't have been able to get this far without all help of the community.</value>
     <comment>About - Thanks - Intro</comment>
   </data>
   <data name="CBTN-About.Label" xml:space="preserve">
@@ -162,15 +162,15 @@
     <comment>AppBarButton - Label - Settings</comment>
   </data>
   <data name="Home-Titlebar-Title.Text" xml:space="preserve">
-    <value>TELGRAPH</value>
+    <value>UNIGRAM</value>
     <comment>Home - Titlebar - Page Title</comment>
   </data>
   <data name="Login-Titlebar-Title.Text" xml:space="preserve">
-    <value>WELCOME TO TELGRAPH</value>
+    <value>WELCOME TO UNIGRAM</value>
     <comment>Login - Titlebar - Page Title</comment>
   </data>
   <data name="Settings-Settings-LocationPermission.Header" xml:space="preserve">
-    <value>Let Telgraph use your location</value>
+    <value>Let Unigram use your location</value>
     <comment>Settings - Settings - ToggleSwitch - Permission for Location </comment>
   </data>
   <data name="Settings-Settings-SyncPeopleHub.Header" xml:space="preserve">
@@ -206,7 +206,7 @@
     <comment>Login - Code - Title</comment>
   </data>
   <data name="Login-Intro-Intro.Text" xml:space="preserve">
-    <value>Telgraph base on unigram is an UWP Telegram-app build by Sadeq Hajizadeh.</value>
+    <value>Unigram is an UWP Telegram-app build by the Windows Community, for the Windows community</value>
     <comment>Login - App Intro - Intro Text</comment>
   </data>
   <data name="Login-PhoneNumber-Country.Header" xml:space="preserve">
@@ -730,5 +730,29 @@
   </data>
   <data name="IsSendingVideoMessage" xml:space="preserve">
     <value>{0} is sending a video message</value>
+  </data>
+  <data name="MonthGenitivePlural" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="MonthGenitiveSingular" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="MonthNominativePlural" xml:space="preserve">
+    <value>Months</value>
+  </data>
+  <data name="MonthNominativeSingular" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="YearGenitivePlural" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="YearGenitiveSingular" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="YearNominativePlural" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="YearNominativeSingular" xml:space="preserve">
+    <value>Year</value>
   </data>
 </root>

@@ -41,9 +41,23 @@ namespace Unigram.Controls.Views
             await StickerSetView.Current.ShowAsync(((TLDocument)e.ClickedItem).StickerSet);
         }
 
-        private void Stickers_ItemClick(object sender, ItemClickEventArgs e)
+        private async void Stickers_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModel.SendStickerCommand.Execute(e.ClickedItem);
+            if (ApplicationSettings.Current.IsConfirmEnabled)
+            {
+                var confirm = new ConfirmStickerSend(e.ClickedItem, ViewModel);
+                await confirm.ShowAsync();
+            } else {
+                ViewModel.SendStickerCommand.Execute(e.ClickedItem);
+            }
+
+            //var msg = new Windows.UI.Popups.MessageDialog("Are you sure?");
+            //msg.Commands.Add(new Windows.UI.Popups.UICommand("Send", (a) =>
+            //{
+            //    ViewModel.SendStickerCommand.Execute(e.ClickedItem);
+            //}));
+            //msg.Commands.Add(new Windows.UI.Popups.UICommand("Cancel"));
+            //await msg.ShowAsync();
         }
 
         private void Stickers_Loaded(object sender, RoutedEventArgs e)

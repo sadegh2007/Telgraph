@@ -16,12 +16,12 @@
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Unigram_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Telgraph_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>30662A540BE5F4BBE0A09684C16D37F015CA6004</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x86|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>938ABCC1F8DDA68373875F3D2D0AA5754FB1B0CA</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -92,42 +92,6 @@
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preview|x86'">
-    <OutputPath>bin\x86\Preview\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;PREVIEW</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preview|ARM'">
-    <OutputPath>bin\ARM\Preview\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;PREVIEW</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>ARM</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preview|x64'">
-    <OutputPath>bin\x64\Preview\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;PREVIEW</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
-    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
-  </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
@@ -175,6 +139,12 @@
     </Compile>
     <Compile Include="Controls\Payments\CardTextBox.cs" />
     <Compile Include="Controls\Payments\DateTextBox.cs" />
+    <Compile Include="Controls\Views\ConfirmStickerSend.xaml.cs">
+      <DependentUpon>ConfirmStickerSend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Views\ForwardPro.xaml.cs">
+      <DependentUpon>ForwardPro.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Views\PhoneCallRatingView.xaml.cs">
       <DependentUpon>PhoneCallRatingView.xaml</DependentUpon>
     </Compile>
@@ -196,6 +166,9 @@
     <Compile Include="Controls\Views\RoundVideoView.xaml.cs">
       <DependentUpon>RoundVideoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Views\SettingsDownloadView.xaml.cs">
+      <DependentUpon>SettingsDownloadView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Views\ShareView.xaml.cs">
       <DependentUpon>ShareView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +184,8 @@
     <Compile Include="Controls\ZoomableGridViewPopup.xaml.cs">
       <DependentUpon>ZoomableGridViewPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AccountTTLConverter.cs" />
+    <Compile Include="Converters\AutoDownloadConverter.cs" />
     <Compile Include="Converters\BooleanNegationConverter.cs" />
     <Compile Include="Converters\BooleanToIndexConverter.cs" />
     <Compile Include="Converters\ChannelJoinedToVisibilityConverter.cs" />
@@ -249,6 +224,7 @@
     <Compile Include="ViewModels\Payments\PaymentFormStep5ViewModel.cs" />
     <Compile Include="ViewModels\Payments\PaymentFormViewModelBase.cs" />
     <Compile Include="ViewModels\Payments\PaymentReceiptViewModel.cs" />
+    <Compile Include="ViewModels\Settings\SettingsDataAndStorageViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsGeneralViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsPrivacyAndSecurityViewModel.cs" />
     <Compile Include="ViewModels\Settings\SettingsPrivacyChatInviteViewModel.cs" />
@@ -984,6 +960,7 @@
       <LastGenOutput>Resources.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </PRIResource>
+    <None Include="Telgraph_StoreKey.pfx" />
     <None Include="Unigram_StoreKey.pfx" />
     <None Include="Unigram_TemporaryKey.pfx" />
   </ItemGroup>
@@ -998,8 +975,18 @@
     <Content Include="Assets\Icons\MessageStatus\ic_unsent_message_lightbg.png" />
     <Content Include="Assets\Icons\Toast\Send.png" />
     <Content Include="Assets\Icons\userPos32.png" />
+    <Content Include="Assets\ic_bot.png" />
+    <Content Include="Assets\ic_gp.png" />
+    <Content Include="Assets\ic_all.png" />
+    <Content Include="Assets\ic_ch.png" />
+    <Content Include="Assets\ic_pv.png" />
     <Content Include="Assets\Images\DefaultBackground.theme-dark.png" />
     <Content Include="Assets\Images\DefaultBackground.theme-light.png" />
+    <Content Include="Assets\Images\ShareProvider_CopyLink24x24.scale-100.png" />
+    <Content Include="Assets\Images\ShareProvider_CopyLink24x24.scale-125.png" />
+    <Content Include="Assets\Images\ShareProvider_CopyLink24x24.scale-150.png" />
+    <Content Include="Assets\Images\ShareProvider_CopyLink24x24.scale-200.png" />
+    <Content Include="Assets\Images\ShareProvider_CopyLink24x24.scale-400.png" />
     <Content Include="Assets\Logos\LockScreenLogo\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\Logos\LockScreenLogo\LockScreenLogo.scale-125.png" />
     <Content Include="Assets\Logos\LockScreenLogo\LockScreenLogo.scale-150.png" />
@@ -1154,6 +1141,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Views\ConfirmStickerSend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Views\ForwardPro.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Views\PhoneCallRatingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1203,6 +1198,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Views\SendPhotosView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Views\SettingsDownloadView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

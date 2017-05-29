@@ -37,6 +37,12 @@
                         Header="Sync contacts"
                         IsOn="{x:Bind ViewModel.IsContactsSyncEnabled, Mode=TwoWay}"
                         Style="{ThemeResource CheckButtonStyle}"/>
+
+                    <ToggleSwitch
+                        Header="Confirm to send sticker"
+                        IsOn="{x:Bind ViewModel.IsConfirmEnabled, Mode=TwoWay}"
+                        Style="{ThemeResource CheckButtonStyle}"/>
+
                 </local:TableStackPanel>
             </StackPanel>
         </ScrollViewer>

@@ -162,7 +162,8 @@
                             </Grid.Background>
                         </Grid>
                         
-                        <Button Grid.Column="1"  x:Name="btnOptions"
+                        <Button x:Name="btnOptions"
+                                Grid.Column="1"
                                 Padding="16,23,16,0"
                                 Style="{StaticResource EllipsisButton}">
                             <FontIcon x:Name="EllipsisIcon"
@@ -189,10 +190,6 @@
                                                     Click="cbtnMasterSettings_Click"
                                                     Tag="&#xE115;"
                                                     Text="Settings"/>
-                                    <MenuFlyoutItem Style="{StaticResource IconMenuFlyoutItemStyle}"
-                                                    Click="cbtnMasterDonate_Click"
-                                                    Tag="&#xE170;"
-                                                    Text="Donate"/>
                                     <MenuFlyoutItem Style="{StaticResource IconMenuFlyoutItemStyle}"
                                                     Click="cbtnMasterAbout_Click"
                                                     Tag="&#xE11B;"
@@ -462,22 +459,27 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid x:Name="catAll" Grid.Column="0" Background="#FF919191" Tapped="allcat_click">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"  Text="All" Foreground="#FF0C0C0C"></TextBlock>
+                            <Grid x:Name="catAll" Grid.Column="0" Background="#FF1D3153" Tapped="allcat_click">
+                                <Image Width="35" Source="ms-appx:///Assets/ic_all.png" />
                             </Grid>
 
-                            <Grid x:Name="catPV" Grid.Column="1" Background="#FFDADADA" Tapped="pvcat_click">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"  Text="Chats" Foreground="#FF0C0C0C"></TextBlock>
+                            <Grid x:Name="catPV" Grid.Column="1" Tapped="pvcat_click">
+                                <Image Width="30" Source="ms-appx:///Assets/ic_pv.png" />
                             </Grid>
 
-                            <Grid x:Name="catGP" Grid.Column="2" Background="#FFDADADA" Tapped="gpcat_click">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"  Text="Groups" Foreground="#FF0C0C0C"></TextBlock>
+                            <Grid x:Name="catGP" Grid.Column="2" Tapped="gpcat_click">
+                                <Image Width="30" Source="ms-appx:///Assets/ic_gp.png" />
                             </Grid>
 
-                            <Grid x:Name="catCH" Grid.Column="3" Background="#FFDADADA" Tapped="chcat_click">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"  Text="Channels" Foreground="#FF0C0C0C"></TextBlock>
+                            <Grid x:Name="catCH" Grid.Column="3" Tapped="chcat_click">
+                                <Image Width="30" Source="ms-appx:///Assets/ic_ch.png" />
+                            </Grid>
+
+                            <Grid x:Name="catBOT" Grid.Column="4" Tapped="botcat_click">
+                                <Image Width="30" Source="ms-appx:///Assets/ic_bot.png" />
                             </Grid>
 
                         </Grid>

@@ -36,9 +36,8 @@ namespace Telegram.Api.TL.Methods.Messages
                 }
             }
             catch (Exception) { to.Write(0xE306D3A); }
-
             //to.Write(0xE306D3A);
-            to.WriteObject(Peer);
+			to.WriteObject(Peer);
 			to.Write(MaxId);
 		}
 	}

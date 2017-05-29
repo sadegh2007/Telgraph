@@ -1,0 +1,18 @@
+﻿<ContentDialog
+    x:Class="Unigram.Controls.Views.ForwardPro"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Unigram.Controls.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Forward Pro"
+    PrimaryButtonText="Forward"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <Grid>
+        <TextBox MaxWidth="300" MinWidth="250" x:Name="text" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+    </Grid>
+</ContentDialog>
